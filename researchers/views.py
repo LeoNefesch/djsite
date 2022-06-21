@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse, HttpResponseNotFound
-from django.shortcuts import render
+from django.shortcuts import redirect, render
 
 
 def index(request):
@@ -14,7 +14,7 @@ def categories(request, catid):
 
 def archive(request, year):
     if int(year) > 2022:
-        raise Http404
+        return redirect('home', permanent=False)
 
     return HttpResponse(f"<h1>Архив по годам</h1><p>{year}</p>")
 
