@@ -1,21 +1,66 @@
 {% load static %}
 <!DOCTYPE html>
-<html lang='en'>
+<html>
 <head>
-    <meta charset="UTF-8">
     <title>{{ title }}</title>
     <link type="text/css" href="{% static 'researchers/css/styles.css' %}" rel="stylesheet" />
+    <meta http-equiv="Content-Type" content="text/html"; charset="UTF-8">
+    <link rel="shortcut icon" href="{% static 'researchers/images/main.ico' %}" type="image/x-icon"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+<table class="table-page" border=0 cellpadding="0" cellspacing="0">
+<tr><td valign=top>
 {% block mainmenu %}
-<ul>
+<div class="header">
+    <ul id="mainmenu" class="mainmenu">
+    <li class="logo"><a href="#"><div class="logo"></div></a></li>
 {% for m in menu %}
-<li>{{m}}</li>
+    {% if not forloop.last %}
+        <li><a href="#">{{m.title}}</a></li>
+    {% else %}
+        <li class="last"><a href="#">{{m.title}}</a></li>
+    {% endif %}
 {% endfor %}
-</ul>    
+        </ul>
+        <div class="clear"></div>
+    </div>    
 {% endblock mainmenu %}
 
+
+<table class="table-content" border=0 cellpadding="0" cellspacing="0">
+<tr>
+    <td valign="top" class="left-chapters">
+    <ul id="leftchapters">
+        <li class="selected">Все категории</li>
+        <li><a href='#'>Физики</a></li>
+        <li><a href='#'>Химики</a></li>
+        <li><a href='#'>Математики</a></li>
+        <li class="share">
+        <p>Здесь может быть канал</p>
+        <a class="share-yt" href="">
+        </li>
+    </ul>
+</td>
+
+<td valign="top" class="content">
+    {% block breadcrumbs %}
+    {% endblock %}
+    
+    <div class="content-text">
 {% block content %}
 {% endblock %}
+    </div>
+
+</td></tr></table>
+</td></tr>
+
+<tr><td valign=top>
+    <div id="footer">
+        <p>Это учёба.</p>
+    </div>
+</td></tr></table>
+
+
 </body>
 </html>
