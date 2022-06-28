@@ -13,7 +13,14 @@ menu = [
 
 def index(request):
     posts = Researchers.objects.all()
-    context = {'posts': posts, 'menu': menu, 'title': 'Главная страница'}
+    cats = Category.objects.all()
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Главная страница',
+        'cat_selected': 0,
+    }
     return render(request, 'researchers/index.html', context=context)
 
 
@@ -39,3 +46,17 @@ def pageNotFound(request, exception):
 
 def show_post(request, post_id):
     return HttpResponse(f"Отображение статьи с id = {post_id}")
+
+
+def show_category(request, cat_id):
+    posts = Researchers.objects.filter(cat_id=cat_id)
+    cats = Category.objects.all()
+
+    context = {
+        'posts': posts,
+        'cats': cats,
+        'menu': menu,
+        'title': 'Отображение по рубрикам',
+        'cat_selected': cat_id,
+    }
+    return render(request, 'researchers/index.html', context=context)
