@@ -1,5 +1,5 @@
 from django.http import Http404, HttpResponse, HttpResponseNotFound
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import *
 
@@ -43,7 +43,15 @@ def pageNotFound(request, exception):
 
 
 def show_post(request, post_id):
-    return HttpResponse(f"Отображение статьи с id = {post_id}")
+    post = get_object_or_404(Researchers, pk=post_id)
+    context = {
+        'post': post,
+        'menu': menu,
+        'title': post.title,
+        'cat_selected': post.cat_id,
+    }
+
+    return render(request, 'researchers/post.html', context=context)
 
 
 def show_category(request, cat_id):
