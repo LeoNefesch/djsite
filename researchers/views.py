@@ -1,5 +1,7 @@
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, DetailView, ListView
 
 from .forms import *
 from .models import *
@@ -12,7 +14,23 @@ menu = [
 ]
 
 
-def index(request):
+class ResearchersHome(ListView):
+    model = Researchers
+    template_name = 'researchers/index.html'
+    context_object_name = 'posts'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['menu'] = menu
+        context['title'] = 'Главная страница'
+        context['cat_selected'] = 0
+        return context
+
+    def get_queryset(self):
+        return Researchers.objects.filter(is_published=True)
+
+
+""" def index(request):
     posts = Researchers.objects.all()
     context = {
         'posts': posts,
@@ -20,14 +38,26 @@ def index(request):
         'title': 'Главная страница',
         'cat_selected': 0,
     }
-    return render(request, 'researchers/index.html', context=context)
+    return render(request, 'researchers/index.html', context=context) """
 
 
 def about(request):
     return render(request, 'researchers/about.html', {'menu': menu, 'title': 'О нас'})
 
 
-def addpage(request):
+class AddPage(CreateView):
+    form_class = AddPostForm
+    template_name = 'researchers/addpage.html'
+    # success_url = reverse_lazy('home') - using instead .models.Researchers.get_absolute_url, reverse
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Добавление статьи'
+        context['menu'] = menu
+        return context
+
+
+""" def addpage(request):
     if request.method == 'POST':
         form = AddPostForm(request.POST, request.FILES)
         if form.is_valid():
@@ -40,7 +70,7 @@ def addpage(request):
         request,
         'researchers/addpage.html',
         {'form': form, 'menu': menu, 'title': 'Добавление статьи'},
-    )
+    ) """
 
 
 def contact(request):
@@ -55,7 +85,7 @@ def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
 
 
-def show_post(request, post_slug):
+""" def show_post(request, post_slug):
     post = get_object_or_404(Researchers, slug=post_slug)
     context = {
         'post': post,
@@ -64,10 +94,40 @@ def show_post(request, post_slug):
         'cat_selected': post.cat_id,
     }
 
-    return render(request, 'researchers/post.html', context=context)
+    return render(request, 'researchers/post.html', context=context) """
 
 
-def show_category(request, cat_id):
+class ShowPost(DetailView):
+    model = Researchers
+    template_name = 'researchers/post.html'
+    slug_url_kwarg = 'post_slug'
+    context_object_name = 'post'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = context['post']
+        context['menu'] = menu
+        return context
+
+
+class ResearchersCategory(ListView):
+    model = Researchers
+    template_name = 'researchers/index.html'
+    context_object_name = 'posts'
+    allow_empty = False
+
+    def get_queryset(self):
+        return Researchers.objects.filter(cat__slug=self.kwargs['cat_slug'], is_published=True)
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = 'Категория - ' + str(context['posts'][0].cat)
+        context['menu'] = menu
+        context['cat_selected'] = context['posts'][0].cat_id
+        return context
+
+
+""" def show_category(request, cat_id):
     posts = Researchers.objects.filter(cat_id=cat_id)
 
     if len(posts) == 0:
@@ -79,4 +139,4 @@ def show_category(request, cat_id):
         'title': 'Отображение по рубрикам',
         'cat_selected': cat_id,
     }
-    return render(request, 'researchers/index.html', context=context)
+    return render(request, 'researchers/index.html', context=context) """
