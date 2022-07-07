@@ -1,7 +1,7 @@
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
-from researchers.views import index, pageNotFound
+from researchers.views import *
 
 from smartsite import settings
 
