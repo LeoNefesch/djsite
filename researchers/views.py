@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
@@ -34,6 +35,7 @@ class ResearchersHome(DataMixin, ListView):
     return render(request, 'researchers/index.html', context=context) """
 
 
+@login_required
 def about(request):
     return render(request, 'researchers/about.html', {'menu': menu, 'title': 'О нас'})
 
