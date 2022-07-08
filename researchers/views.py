@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import Http404, HttpResponse, HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
@@ -37,15 +38,19 @@ def about(request):
     return render(request, 'researchers/about.html', {'menu': menu, 'title': 'О нас'})
 
 
-class AddPage(DataMixin, CreateView):
+class AddPage(LoginRequiredMixin, DataMixin, CreateView):
     form_class = AddPostForm
     template_name = 'researchers/addpage.html'
-    # success_url = reverse_lazy('home') - using instead .models.Researchers.get_absolute_url, reverse
+    success_url = reverse_lazy(
+        'home'
+    )  # using instead .models.Researchers.get_absolute_url, reverse
+    login_url = reverse_lazy('home')
+    raise_exception = True
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
         c_def = self.get_user_context(title='Добавление статьи')
-        return context
+        return dict(list(context.items()) + list(c_def.items()))
 
 
 """ def addpage(request):
