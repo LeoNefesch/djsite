@@ -1,5 +1,4 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.http import Http404, HttpResponse, HttpResponseNotFound
@@ -154,7 +153,7 @@ class RegisterUser(DataMixin, CreateView):
 
 
 class LoginUser(DataMixin, LoginView):
-    form_class = AuthenticationForm
+    form_class = LoginUserForm
     template_name = 'researchers/login.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
