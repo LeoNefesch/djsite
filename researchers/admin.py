@@ -17,11 +17,12 @@ class ResearchersAdmin(admin.ModelAdmin):
         'cat',
         'content',
         'photo',
+        'get_html_photo',
         'is_published',
         'time_create',
         'time_update',
     )
-    readonly_fields = ('time_create', 'time_update')
+    readonly_fields = ('time_create', 'time_update', 'get_html_photo')
 
     def get_html_photo(self, object):
         if object.photo:
