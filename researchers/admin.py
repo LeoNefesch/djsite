@@ -23,6 +23,7 @@ class ResearchersAdmin(admin.ModelAdmin):
         'time_update',
     )
     readonly_fields = ('time_create', 'time_update', 'get_html_photo')
+    save_on_top = True
 
     def get_html_photo(self, object):
         if object.photo:
