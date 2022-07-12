@@ -27,17 +27,6 @@ class ResearchersHome(DataMixin, ListView):
         return Researchers.objects.filter(is_published=True).select_related('cat')
 
 
-""" def index(request):
-    posts = Researchers.objects.all()
-    context = {
-        'posts': posts,
-        'menu': menu,
-        'title': 'Главная страница',
-        'cat_selected': 0,
-    }
-    return render(request, 'researchers/index.html', context=context) """
-
-
 @login_required
 def about(request):
     return render(request, 'researchers/about.html', {'menu': menu, 'title': 'О нас'})
@@ -58,26 +47,6 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView):
         return dict(list(context.items()) + list(c_def.items()))
 
 
-""" def addpage(request):
-    if request.method == 'POST':
-        form = AddPostForm(request.POST, request.FILES)
-        if form.is_valid():
-            # print(form.cleaned_data)
-            form.save()
-            return redirect('home')
-    else:
-        form = AddPostForm()
-    return render(
-        request,
-        'researchers/addpage.html',
-        {'form': form, 'menu': menu, 'title': 'Добавление статьи'},
-    ) """
-
-
-""" def contact(request):
-    return HttpResponse("Обратная связь") """
-
-
 class ContactFormView(DataMixin, FormView):
     form_class = ContactForm
     template_name = 'researchers/contact.html'
@@ -93,24 +62,8 @@ class ContactFormView(DataMixin, FormView):
         return redirect('home')
 
 
-""" def login(request):
-    return HttpResponse("Авторизация") """
-
-
 def pageNotFound(request, exception):
     return HttpResponseNotFound('<h1>Страница не найдена</h1>')
-
-
-""" def show_post(request, post_slug):
-    post = get_object_or_404(Researchers, slug=post_slug)
-    context = {
-        'post': post,
-        'menu': menu,
-        'title': post.title,
-        'cat_selected': post.cat_id,
-    }
-
-    return render(request, 'researchers/post.html', context=context) """
 
 
 class ShowPost(DataMixin, DetailView):
@@ -144,21 +97,6 @@ class ResearchersCategory(DataMixin, ListView):
             cat_selected=c.pk,
         )
         return dict(list(context.items()) + list(c_def.items()))
-
-
-""" def show_category(request, cat_id):
-    posts = Researchers.objects.filter(cat_id=cat_id)
-
-    if len(posts) == 0:
-        raise Http404
-
-    context = {
-        'posts': posts,
-        'menu': menu,
-        'title': 'Отображение по рубрикам',
-        'cat_selected': cat_id,
-    }
-    return render(request, 'researchers/index.html', context=context) """
 
 
 class RegisterUser(DataMixin, CreateView):

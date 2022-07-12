@@ -44,4 +44,4 @@ admin.site.register(Category, CategoryAdmin)
 
 
 admin.site.site_title = 'Админ-панель сайта об учёных'
-admin.site.site_header = 'Админ-панель сайта об учёных 2'
+admin.site.site_header = 'Админ-панель сайта об учёных'
