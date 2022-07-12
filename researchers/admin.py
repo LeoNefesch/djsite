@@ -11,7 +11,17 @@ class ResearchersAdmin(admin.ModelAdmin):
     list_editable = ('is_published',)
     list_filter = ('is_published', 'time_create')
     prepopulated_fields = {"slug": ('title',)}
-    fields = ('title', 'slug', 'cat', 'content', 'photo', 'is_published')
+    fields = (
+        'title',
+        'slug',
+        'cat',
+        'content',
+        'photo',
+        'is_published',
+        'time_create',
+        'time_update',
+    )
+    readonly_fields = ('time_create', 'time_update')
 
     def get_html_photo(self, object):
         if object.photo:
